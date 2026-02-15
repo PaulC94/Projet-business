@@ -1,0 +1,5 @@
+{
+  "name": "Nexus AI Document Analysis",
+  "description": "An AI-powered RAG (Retrieval Augmented Generation) engine to analyze proprietary documents for French SMEs. Upload documents and ask questions to get insights based solely on the provided context.",
+  "requestFramePermissions": []
+}
