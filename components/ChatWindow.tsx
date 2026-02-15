@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import type { ChatMessage } from '../types';
 import Message from './Message';
@@ -36,9 +35,9 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ chatHistory, isLoading, error, 
     <div className="flex flex-col h-full">
       <div className="flex-grow p-4 md:p-6 overflow-y-auto">
         {chatHistory.length === 0 ? (
-          <div className="flex flex-col items-center justify-center h-full text-center text-slate-400">
-            <LogoIcon className="w-16 h-16 mb-4 text-slate-600" />
-            <h2 className="text-2xl font-semibold text-slate-300">Bienvenue sur Nexus AI</h2>
+          <div className="flex flex-col items-center justify-center h-full text-center text-gray-400">
+            <LogoIcon className="w-16 h-16 mb-4 text-gray-600" />
+            <h2 className="text-2xl font-semibold text-[#E3E3E3]">Bienvenue sur Nexus AI</h2>
             <p className="max-w-md mt-2">
               {hasFiles 
                 ? "Vos documents sont prêts. Posez une question pour commencer l'analyse." 
@@ -63,7 +62,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ chatHistory, isLoading, error, 
         </div>
       )}
 
-      <div className="p-4 md:p-6 border-t border-slate-700 bg-slate-800/80">
+      <div className="p-4 md:p-6 border-t border-[#3e4042] bg-[#2D2E31]">
         <form onSubmit={handleSubmit} className="flex items-center gap-4">
           <input
             type="text"
@@ -71,12 +70,12 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ chatHistory, isLoading, error, 
             onChange={(e) => setInput(e.target.value)}
             placeholder={hasFiles ? "Posez votre question ici..." : "Veuillez d'abord charger un document"}
             disabled={!hasFiles || isLoading}
-            className="w-full bg-slate-700 border border-slate-600 rounded-lg py-2 px-4 text-slate-200 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition-shadow"
+            className="w-full bg-[#3a3b3e] border border-gray-600 rounded-lg py-2 px-4 text-[#E3E3E3] placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#A8C7FA] disabled:opacity-50 disabled:cursor-not-allowed transition-shadow"
           />
           <button
             type="submit"
             disabled={isSendDisabled}
-            className="bg-indigo-600 text-white p-2 rounded-lg hover:bg-indigo-500 disabled:bg-slate-600 disabled:cursor-not-allowed transition-colors"
+            className="bg-[#A8C7FA] text-[#1E1F20] font-semibold p-2 rounded-lg hover:bg-[#8ab0f7] disabled:bg-gray-600 disabled:text-gray-400 disabled:cursor-not-allowed transition-colors"
             aria-label="Envoyer"
           >
             <SendIcon className="w-6 h-6" />

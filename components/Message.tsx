@@ -1,4 +1,3 @@
-
 import React from 'react';
 import type { ChatMessage } from '../types';
 import { UserIcon, BotIcon } from './Icons';
@@ -10,9 +9,9 @@ interface MessageProps {
 
 const TypingIndicator: React.FC = () => (
   <div className="flex items-center space-x-1">
-    <div className="w-2 h-2 bg-slate-400 rounded-full animate-pulse [animation-delay:-0.3s]"></div>
-    <div className="w-2 h-2 bg-slate-400 rounded-full animate-pulse [animation-delay:-0.15s]"></div>
-    <div className="w-2 h-2 bg-slate-400 rounded-full animate-pulse"></div>
+    <div className="w-2 h-2 bg-gray-400 rounded-full animate-pulse [animation-delay:-0.3s]"></div>
+    <div className="w-2 h-2 bg-gray-400 rounded-full animate-pulse [animation-delay:-0.15s]"></div>
+    <div className="w-2 h-2 bg-gray-400 rounded-full animate-pulse"></div>
   </div>
 );
 
@@ -37,13 +36,13 @@ const Message: React.FC<MessageProps> = ({ message, isLoading = false }) => {
   const containerClasses = `flex items-start gap-4 ${isModel ? '' : 'justify-end'}`;
   const messageBubbleClasses = `max-w-2xl px-5 py-3 rounded-2xl ${
     isModel 
-      ? 'bg-slate-700 text-slate-200 rounded-tl-none' 
-      : 'bg-indigo-600 text-white rounded-br-none'
+      ? 'bg-[#2D2E31] text-[#E3E3E3] rounded-tl-none' 
+      : 'bg-[#A8C7FA] text-[#1E1F20] rounded-br-none'
   }`;
 
   const Icon = isModel ? BotIcon : UserIcon;
   const iconClasses = `w-8 h-8 p-1 rounded-full flex-shrink-0 ${
-    isModel ? 'bg-slate-700 text-indigo-300' : 'bg-indigo-600 text-white'
+    isModel ? 'bg-[#2D2E31] text-[#A8C7FA]' : 'bg-[#A8C7FA] text-[#1E1F20]'
   }`;
   
   const content = (

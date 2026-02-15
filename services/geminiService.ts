@@ -1,53 +1,38 @@
-
-import { GoogleGenAI, Part } from "@google/genai";
-import { SYSTEM_INSTRUCTION } from '../constants';
 import type { UploadedFile } from '../types';
 
-export const generateResponse = async (files: UploadedFile[], prompt: string): Promise<string> => {
-  if (!process.env.API_KEY) {
-    throw new Error("API_KEY environment variable is not set.");
+export const generateResponse = async (files: UploadedFile[], prompt: string, cloudFunctionUrl: string): Promise<string> => {
+
+  if (!cloudFunctionUrl) {
+    throw new Error("L'URL de la Cloud Function n'est pas configurée.");
   }
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-
-  const fileParts: Part[] = files.map(file => {
-    // Expected data format is "data:mime/type;base64,ENCODED_DATA"
-    const base64Data = file.data.split(',')[1];
-    if (!base64Data) {
-      throw new Error(`Invalid file data for ${file.name}`);
-    }
-    return {
-      inlineData: {
-        mimeType: file.mimeType,
-        data: base64Data
-      }
-    };
-  });
-
-  const textPart: Part = { text: prompt };
 
   try {
-    const response = await ai.models.generateContent({
-      model: 'gemini-3-pro-preview',
-      contents: [{ parts: [...fileParts, textPart] }],
-      config: {
-        systemInstruction: SYSTEM_INSTRUCTION,
-        temperature: 0.2,
-      },
+    const response = await fetch(cloudFunctionUrl, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ files, prompt }),
     });
 
-    if (response.text) {
-      return response.text;
+    if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ error: 'Réponse non-JSON du serveur.' }));
+        throw new Error(`Erreur du serveur (${response.status}): ${errorData.error || 'Une erreur inconnue est survenue.'}`);
     }
 
-    // Handle cases where the response might be blocked
-    if (!response.candidates || response.candidates.length === 0) {
-       return "La réponse a été bloquée pour des raisons de sécurité. Veuillez ajuster votre question.";
+    const data = await response.json();
+
+    if (data.text) {
+        return data.text;
     }
 
-    return "Je n'ai pas pu générer une réponse. Veuillez réessayer.";
+    throw new Error("La réponse du serveur ne contenait pas de texte valide.");
 
   } catch (error) {
-    console.error("Error calling Gemini API:", error);
-    throw new Error("Échec de la communication avec l'API Gemini. Vérifiez la console pour plus de détails.");
+    console.error("Error calling Cloud Function:", error);
+    if (error instanceof Error) {
+        throw new Error(`Échec de la communication avec le backend : ${error.message}`);
+    }
+    throw new Error("Une erreur de communication inconnue est survenue.");
   }
 };
